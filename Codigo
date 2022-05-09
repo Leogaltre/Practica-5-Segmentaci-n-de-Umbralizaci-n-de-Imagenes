@@ -1,0 +1,88 @@
+"Tratamiento de Imagenes Mediante Umbrales"
+
+import cv2
+from matplotlib import pyplot as plt
+
+imag = cv2.imread('AMERIKEos.jpeg', 0)
+img = cv2.resize(imag, (300, 600))
+
+# imag = cv2.imread('amosc.jpeg', 0)
+# img = cv2.resize(imag, (600, 450))
+
+#img - imagen en color
+#El valor de umbral aquí 80 se establece como el umbral, todos los valores superiores a 80 se convierten en 255 dados más tarde, y los menores de 80 se convierten en 0
+# Máximo 255
+# Formatcv2.THRESH_BINARY procesamiento binario,
+# ret, umbral; bin, imagen después del procesamiento binario
+
+Val = int(input('Valor de Umbral regulador: ')) #10/ 80
+if Val%2 == 0:
+    Val1 = Val+1
+else:
+    Val1 = Val
+
+# THRESH_BINARY
+ret, thresh1 = cv2.threshold(img, Val, 255, cv2.THRESH_BINARY)
+# THRESH_BINARY_INV
+ret, thresh2 = cv2.threshold(img, Val, 255, cv2.THRESH_BINARY_INV)
+# THRESH_TRUNC
+ret, thresh3 = cv2.threshold(img, Val, 255, cv2.THRESH_TRUNC)
+# THRESH_TOZERO
+ret, thresh4 = cv2.threshold(img, Val, 255, cv2.THRESH_TOZERO)
+# THRESH_TOZERO_INV
+ret, thresh5 = cv2.threshold(img, Val, 255, cv2.THRESH_TOZERO_INV)
+
+"Necesita de una Imagen en un solo canal es decir en Gris"
+
+# ADAPTIVE_THRESH_GAUSSIAN_C
+thresh6 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, Val1, 2)
+# ADAPTIVE_THRESH_MEAN_C
+thresh7 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, Val1, 2)
+# THRESH_BINARY + THRESH_OTSU
+ret, thresh8 = cv2.threshold(img, Val, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+
+titles = ['Original', 'BINARY', 'BINARY_INV','TRUNC', 'TOZERO',
+          'TOZERO_INV','GAUSSIAN_C', 'MEAN_C', 'OTSU']
+
+'''
+# Como deberían llamarse 
+titles = ['Original', 'THRESH_BINARY', 'THRESH_BINARY_INV',
+          'THRESH_TRUNC', 'THRESH_TOZERO', 'THRESH_TOZERO_INV',
+          'ADAPTIVE_THRESH_GAUSSIAN_C', 'ADAPTIVE_THRESH_MEAN_C'...]
+'''
+
+images = [img, thresh1, thresh2, thresh3, thresh4, thresh5, thresh6, thresh7, thresh8]
+
+for i in range(9):
+    #print(i)
+    # Tamaño 2 en Y, 4 en X
+    plt.subplot(3, 3, i+1)
+    plt.imshow(images[i])
+    plt.title(titles[i])
+    plt.axis('off')
+plt.suptitle('Reparación de Imagen mediante Umbrales')
+plt.show()
+
+
+'''
+Modificar el tamaño a un Plot 
+# Tamaño 2 en Y, 4 en X
+size, coords = plt.subplot(2, 4)
+size.set_size_inches(12, 35)
+
+for i in range(8):
+    print(i)
+    plt.imshow(images[i])
+    plt.title(titles[i])
+    plt.axis('off')
+plt.suptitle('Reparación de Imagen mediante Umbrales')
+plt.show()
+'''
+
+'''
+imag = cv2.imread('amosc.jpeg')
+img = cv2.resize(imag, (600, 450))
+
+imag = cv2.imread('AMERIKEos.jpeg')
+img = cv2.resize(imag, (300, 600))
+'''
